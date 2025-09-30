@@ -22,13 +22,12 @@ exports.handler = async (event) => {
 
     const body = JSON.stringify({
         phone_number,
-        voice: "0bcb8f02-3950-4e87-a988-6c65be206f30",
         task: defaultTask(),
-        first_sentence: "お電話ありがとうございます。株式会社DHCサポートセンター、タナカでございます。ご用件をお伺いしてもよろしいでしょうか？",
+        first_sentence: "お電話ありがとうございます。株式会社デジタル・ハイブリッド・センターのお客様窓口、タナカでございます。ご用件をお伺いしてもよろしいでしょうか？",
         language: "ja-JP",
         background_track: "office",
         record: false,
-        summary_prompt: "「株式会社DHC」のカスタマーサポート宛に、お客様からの電話でした。お客様についての情報、お客様のお問い合わせ内容、そしてそれに対するオペレーターの案内の内容を完結に日本語で要約してください。",
+        summary_prompt: "「株式会社デジタル・ハイブリッド・センター」のカスタマーサポート宛に、お客様からの電話でした。お客様についての情報、お客様のお問い合わせ内容、そしてそれに対するオペレーターの案内の内容を完結に日本語で要約してください。",
         persona_id: "162ef5ca-4ab2-4c1a-beb5-efb126f6e230",
         webhook: "https://ai-call-ceter-demo.netlify.app/.netlify/functions/webhook",
         tools:["KB-bf7832cb-5ea6-4130-a23a-cc53702289c5"],

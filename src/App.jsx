@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import PhoneInput from 'react-phone-number-input'
 import 'react-phone-number-input/style.css'
@@ -11,10 +11,15 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [webhookData, setWebhookData] = useState(null);
+  const [isPolling, setIsPolling] = useState(false);
+  const pollingInterval = useRef(null);
 
   async function startCall() {
     setError(null);
     setResult(null);
+    setWebhookData(null);
+    
     if (!E164.test(phone)) {
       setError("電話番号はE.164形式（+81..., +61..., +1...）で入力してください。");
       return;
@@ -29,14 +34,54 @@ export default function App() {
         }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json?.error || "Failed to start call");
+      if (!res.ok){
+        //console.log(JSON.stringify(json?.error));
+        throw new Error(json?.error.message || "Failed to start call");
+      }
       setResult(json);
+      
+      // Start polling for webhook data
+      if (json.call_id) {
+        startPolling(json.call_id);
+      }
     } catch (error) {
-      setError(error?.message || "unknown error");
+      setError(error.message || "unknown error");
+      //console.log(error.message)
     } finally {
       setLoading(false);
     }
   }
+
+  function startPolling(callId) {
+    setIsPolling(true);
+    pollingInterval.current = setInterval(async () => {
+      try {
+        const response = await fetch(`/.netlify/functions/get-webhook-data?call_id=${callId}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.found) {
+            setWebhookData(data.data);
+            stopPolling();
+          }
+        }
+      } catch (error) {
+        console.error("Polling error:", error);
+      }
+    }, 2000); // Poll every 2 seconds
+  }
+
+  function stopPolling() {
+    if (pollingInterval.current) {
+      clearInterval(pollingInterval.current);
+      pollingInterval.current = null;
+    }
+    setIsPolling(false);
+  }
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => stopPolling();
+  }, []);
 
   return (
     <>
@@ -56,16 +101,54 @@ export default function App() {
           {loading ? "電話中..." : "電話をかける"}
         </button>
 
-        {error && <p style={{ color: "crimson", marginTop: 12 }}>{error}</p>}
+        {error && <p style={{ color: "#c1121f", marginTop: 12 }}>
+          {JSON.stringify(error)}
+          </p>
+        }
 
         {result && (
           <div className="result">
             <h2>Call Result</h2>
             <div><strong>status:</strong> {result.status || "(n/a)"} </div>
             <div><strong>call_id:</strong> {result.call_id || "(n/a)"} </div>
-            <pre style={{ background: "#f8f8f8", padding: 12, borderRadius: 8, overflow: "auto" }}>
-              {JSON.stringify(result, null, 2)}
-            </pre>
+            
+            {isPolling && (
+              <div style={{ color: "#2196F3", marginTop: 12, padding: 8, background: "#e3f2fd", borderRadius: 4 }}>
+                🔄 通話中...
+              </div>
+            )}
+            
+            {webhookData && (
+              <div className="webhook-data" style={{ marginTop: 16 }}>
+                <h3>📞 通話結果</h3>
+                
+                <div style={{ 
+                  background: "#f0f8ff", 
+                  padding: 16, 
+                  borderRadius: 8, 
+                  marginBottom: 12,
+                  border: "1px solid #b3d9ff"
+                }}>
+                  <div><strong>通話時間:</strong> {webhookData.corrected_duration}秒</div>
+                  <div><strong>開始時刻:</strong> {new Date(webhookData.started_at).toLocaleString('ja-JP')}</div>
+                  <div><strong>終了時刻:</strong> {new Date(webhookData.end_at).toLocaleString('ja-JP')}</div>
+                  <div><strong>通話料金:</strong> ${webhookData.price}</div>
+                </div>
+
+                {webhookData.summary && (
+                  <div style={{ 
+                    background: "#f8fff8", 
+                    padding: 16, 
+                    borderRadius: 8, 
+                    marginBottom: 12,
+                    border: "1px solid #c8e6c9"
+                  }}>
+                    <h4>📝 通話サマリー</h4>
+                    <p style={{ lineHeight: 1.6 }}>{webhookData.summary}</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
