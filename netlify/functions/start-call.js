@@ -28,10 +28,10 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         phone_number,
-        persona_id: process.env.PERSONA_ID,
+        persona_id: "162ef5ca-4ab2-4c1a-beb5-efb126f6e230",
         task: defaultTask(),
         //webhook_url: "http://localhost:8888/.netlify/functions/webhook", //local test
-        webhook_url: "https://ai-call-ceter-demo.netlify.app/.netlify/functions/bland-webhook" //production
+        webhook_url: "https://ai-call-ceter-demo.netlify.app/.netlify/functions/webhook" //production
       }),
     });
 
