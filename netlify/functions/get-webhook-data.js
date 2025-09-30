@@ -1,3 +1,5 @@
+const { getStore } = require('@netlify/blobs');
+
 exports.handler = async (event) => {
   if (event.httpMethod !== "GET") {
     return { statusCode: 405, body: "Method Not Allowed" };
@@ -10,9 +12,8 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: JSON.stringify({ error: "call_id is required" }) };
     }
 
-    // Check if we have webhook data for this call
-    const webhookData = global.webhookData || {};
-    const callData = webhookData[call_id];
+    const store = getStore('webhook-data');
+    const callData = await store.get(call_id);
     
     if (!callData) {
       return { 
@@ -28,7 +29,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify({ 
         found: true, 
-        data: callData 
+        data: JSON.parse(callData)
       }),
     };
   } catch (e) {
