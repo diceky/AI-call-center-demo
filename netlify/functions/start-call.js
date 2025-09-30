@@ -20,22 +20,23 @@ exports.handler = async (event) => {
       return { statusCode: 500, body: JSON.stringify({ error: "BLAND_API_KEY not set" }) };
     }
 
+    const body = JSON.stringify({
+        phone_number,
+        persona_id: "162ef5ca-4ab2-4c1a-beb5-efb126f6e230",
+        task: defaultTask(),
+        webhook_url: "https://ai-call-ceter-demo.netlify.app/.netlify/functions/webhook",
+      });
+    
+    console.log("[Start Call] Request Body:", body);
+
     const resp = await fetch("https://api.bland.ai/v1/calls", {
       method: "POST",
       headers: {
         "content-type": "application/json",
         authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify({
-        phone_number,
-        persona_id: "162ef5ca-4ab2-4c1a-beb5-efb126f6e230",
-        task: defaultTask(),
-        //webhook_url: "http://localhost:8888/.netlify/functions/webhook", //local test
-        webhook_url: "https://ai-call-ceter-demo.netlify.app/.netlify/functions/webhook" //production
-      }),
+      body: body
     });
-
-    console.log(body);
 
     const data = await resp.json();
     if (!resp.ok) {
