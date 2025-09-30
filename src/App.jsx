@@ -75,9 +75,10 @@ export default function App() {
 
         {result && (
           <div className="result">
-            <h2>Call Result</h2>
+            <h2>System response</h2>
             <p><strong>status:</strong> {result.status || "(n/a)"} </p>
             <p><strong>call_id:</strong> {result.call_id || "(n/a)"} </p>
+            <p>{result.status === "success" ? "電話をかけています、少々お待ち下さい🤙" : "電話をかけることに失敗しました、再度お試しください。"}</p>
           </div>
         )}
       </div>
