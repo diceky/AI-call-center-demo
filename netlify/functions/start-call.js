@@ -35,6 +35,8 @@ exports.handler = async (event) => {
       }),
     });
 
+    console.log(body);
+
     const data = await resp.json();
     if (!resp.ok) {
       return { statusCode: resp.status, body: JSON.stringify({ error: data?.error || data }) };
@@ -42,7 +44,7 @@ exports.handler = async (event) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ call_id: data?.call_id || data?.id || null, raw: data }),
+      body: JSON.stringify({ call_id: data?.call_id || null, status: data?.status, raw: data }),
     };
   } catch (e) {
     return { statusCode: 500, body: JSON.stringify({ error: e?.message || "unknown error" }) };

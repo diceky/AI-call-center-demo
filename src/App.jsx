@@ -61,10 +61,10 @@ export default function App() {
         {result && (
           <div className="result">
             <h2>Call Result</h2>
-            <div><strong>status:</strong> {result.status} </div>
+            <div><strong>status:</strong> {result.status || "(n/a)"} </div>
             <div><strong>call_id:</strong> {result.call_id || "(n/a)"} </div>
             <pre style={{ background: "#f8f8f8", padding: 12, borderRadius: 8, overflow: "auto" }}>
-              {JSON.stringify(result.raw, null, 2)}
+              {JSON.stringify(result, null, 2)}
             </pre>
           </div>
         )}
