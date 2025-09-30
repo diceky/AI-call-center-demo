@@ -93,3 +93,120 @@
   font-size: 14px;
   margin: 8px 0;
 }
+
+/**************
+Responsive
+**************/
+@media screen and (max-width: 480px) {
+
+    /*　Smartphone portrait */
+    #root{
+      padding: 20px 0;
+    }
+    .wrapper{
+      padding: 0 20px;
+    }
+
+    .title {
+      font-size: 48px;
+      margin-bottom: 32px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .warning {
+      color: #c1121f;
+      font-size: 12px;
+    }
+
+
+    .inputWrapper{
+      width: 100%;
+      box-sizing: border-box;
+      margin: 60px auto 40px;
+      padding: 36px 16px;
+    }
+
+    .PhoneInput {
+      width: 100%;
+      font-size: 24px;
+    }
+
+    .PhoneInput input {
+      font-size: 14px;
+    }
+
+    .call-button {
+      padding: 24px 80px;
+      font-size: 14px;
+    }
+
+    .footer {
+      font-size: 12px;
+    }
+
+    .result{
+      margin: 0px auto 60px;
+    }
+  }
+  
+  
+  @media screen and (min-width: 480px) and (max-width: 896px) {
+    /*　for iPad portrait and Smartphone landscape 　*/
+    #root{
+      padding: 60px 0;
+    }
+    .wrapper{
+      padding: 0 40px;
+    }
+
+    .title {
+      font-size: 48px;
+      margin-bottom: 32px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      width: 90%;
+      margin: 0 auto;
+    }
+
+    .warning {
+      color: #c1121f;
+      font-size: 12px;
+    }
+
+
+    .inputWrapper{
+      width: 100%;
+      box-sizing: border-box;
+      margin: 60px auto 40px;
+      padding: 48px 16px;
+    }
+
+    .PhoneInput {
+      width: 100%;
+      font-size: 32px;
+    }
+
+    .PhoneInput input {
+      font-size: 18px;
+    }
+
+    .call-button {
+      padding: 24px 80px;
+      font-size: 18px;
+    }
+
+    .footer {
+      font-size: 12px;
+    }
+
+    .result{
+      margin: 0px auto 60px;
+    }
+  }
