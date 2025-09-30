@@ -29,7 +29,7 @@ exports.handler = async (event) => {
         record: false,
         summary_prompt: "「株式会社デジタル・ハイブリッド・センター」のカスタマーサポート宛に、お客様からの電話でした。お客様についての情報、お客様のお問い合わせ内容、そしてそれに対するオペレーターの案内の内容を完結に日本語で要約してください。",
         persona_id: "162ef5ca-4ab2-4c1a-beb5-efb126f6e230",
-        webhook: "https://ai-call-ceter-demo.netlify.app/.netlify/functions/webhook",
+        webhook: "https://ai-call-center-demo.netlify.app/.netlify/functions/webhook",
         tools:["KB-4437bc8c-b66e-4053-9e44-4142cfaac92e"],
       });
     
